@@ -19,6 +19,8 @@
     "downlevelIteration": true
   },
   "include": [
-    "src"
+    "src",
+    "src/global.d.ts",
+    "src/images.d.ts"
   ]
 }

@@ -396,7 +396,7 @@ export class UserSettings {
 
     // Theme-related methods
     saveUserThemeSyncPreference(sync) {
-        localStorage.setItem('userThemeSync', sync);
+        localStorage.setItem('userThemeSync', JSON.stringify(sync));
     }
 
     saveUserLightThemePreference(theme) {

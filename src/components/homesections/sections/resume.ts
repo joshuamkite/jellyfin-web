@@ -100,6 +100,6 @@ export function loadResume(
     const itemsContainer: SectionContainerElement | null = elem.querySelector('.itemsContainer');
     if (!itemsContainer) return;
     itemsContainer.fetchData = getItemsToResumeFn(mediaType, apiClient.serverId(), options);
-    itemsContainer.getItemsHtml = getItemsToResumeHtmlFn(userSettings.useEpisodeImagesInNextUpAndResume(), mediaType, options);
+    itemsContainer.getItemsHtml = getItemsToResumeHtmlFn(!!userSettings.useEpisodeImagesInNextUpAndResume(), mediaType, options);
     itemsContainer.parentContainer = elem;
 }

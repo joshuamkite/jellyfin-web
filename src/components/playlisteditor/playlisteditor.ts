@@ -28,14 +28,14 @@ import 'material-design-icons-iconfont';
 import '../formdialog.scss';
 
 interface DialogElement extends HTMLDivElement {
-    submitted?: boolean
+    submitted?: boolean;
 }
 
 interface PlaylistEditorOptions {
-    items: string[],
-    serverId: string,
-    enableAddToPlayQueue?: boolean,
-    defaultValue?: string
+    items: string[];
+    serverId: string;
+    enableAddToPlayQueue?: boolean;
+    defaultValue?: string;
 }
 
 let currentServerId: string;
@@ -51,14 +51,14 @@ function onSubmit(this: HTMLElement, e: Event) {
         if (playlistId) {
             userSettings.set('playlisteditor-lastplaylistid', playlistId);
             addToPlaylist(panel, playlistId)
-                .catch(err => {
+                .catch((err) => {
                     console.error('[PlaylistEditor] Failed to add to playlist %s', playlistId, err);
                     toast(globalize.translate('PlaylistError.AddFailed'));
                 })
                 .finally(loading.hide);
         } else {
             createPlaylist(panel)
-                .catch(err => {
+                .catch((err) => {
                     console.error('[PlaylistEditor] Failed to create playlist', err);
                     toast(globalize.translate('PlaylistError.CreateFailed'));
                 })
@@ -87,7 +87,7 @@ function createPlaylist(dlg: DialogElement) {
                 UserId: apiClient.getCurrentUserId()
             }
         })
-        .then(result => {
+        .then((result) => {
             dlg.submitted = true;
             dialogHelper.close(dlg);
 
@@ -148,37 +148,39 @@ function populatePlaylists(editorOptions: PlaylistEditorOptions, panel: DialogEl
     return getItemsApi(api)
         .getItems({
             userId: apiClient.getCurrentUserId(),
-            includeItemTypes: [ BaseItemKind.Playlist ],
-            sortBy: [ ItemSortBy.SortName ],
+            includeItemTypes: [BaseItemKind.Playlist],
+            sortBy: [ItemSortBy.SortName],
             recursive: true
         })
         .then(({ data }) => {
-            return Promise.all((data.Items || []).map(item => {
-                const playlist = {
-                    item,
-                    permissions: undefined
-                };
+            return Promise.all(
+                (data.Items || []).map((item) => {
+                    const playlist = {
+                        item,
+                        permissions: undefined
+                    };
 
-                if (!item.Id) return playlist;
+                    if (!item.Id) return playlist;
 
-                return getPlaylistsApi(api)
-                    .getPlaylistUser({
-                        playlistId: item.Id,
-                        userId: apiClient.getCurrentUserId()
-                    })
-                    .then(({ data: permissions }) => ({
-                        ...playlist,
-                        permissions
-                    }))
-                    .catch(err => {
-                        // If a user doesn't have access, then the request will 404 and throw
-                        console.info('[PlaylistEditor] Failed to fetch playlist permissions', err);
+                    return getPlaylistsApi(api)
+                        .getPlaylistUser({
+                            playlistId: item.Id,
+                            userId: apiClient.getCurrentUserId()
+                        })
+                        .then(({ data: permissions }) => ({
+                            ...playlist,
+                            permissions
+                        }))
+                        .catch((err) => {
+                            // If a user doesn't have access, then the request will 404 and throw
+                            console.info('[PlaylistEditor] Failed to fetch playlist permissions', err);
 
-                        return playlist;
-                    });
-            }));
+                            return playlist;
+                        });
+                })
+            );
         })
-        .then(playlists => {
+        .then((playlists) => {
             let html = '';
 
             if ((editorOptions.enableAddToPlayQueue !== false && playbackManager.isPlaying()) || SyncPlay?.Manager.isSyncPlayEnabled()) {
@@ -187,11 +189,13 @@ function populatePlaylists(editorOptions: PlaylistEditorOptions, panel: DialogEl
 
             html += `<option value="">${globalize.translate('OptionNew')}</option>`;
 
-            html += playlists.map(({ item, permissions }) => {
-                if (!permissions?.CanEdit) return '';
+            html += playlists
+                .map(({ item, permissions }) => {
+                    if (!permissions?.CanEdit) return '';
 
-                return `<option value="${item.Id}">${escapeHtml(item.Name)}</option>`;
-            });
+                    return `<option value="${item.Id}">${escapeHtml(item.Name)}</option>`;
+                })
+                .join('');
 
             select.innerHTML = html;
 
@@ -199,7 +203,7 @@ function populatePlaylists(editorOptions: PlaylistEditorOptions, panel: DialogEl
             if (!defaultValue) {
                 defaultValue = userSettings.get('playlisteditor-lastplaylistid') || '';
             }
-            select.value = defaultValue === 'new' ? '' : defaultValue;
+            select.value = defaultValue === 'new' ? '' : (defaultValue ?? '');
 
             // If the value is empty set it again, in case we tried to set a lastplaylistid that is no longer valid
             if (!select.value) {
@@ -257,7 +261,7 @@ function getEditorHtml(items: string[]) {
 }
 
 function initEditor(content: DialogElement, options: PlaylistEditorOptions, items: string[]) {
-    content.querySelector('#selectPlaylistToAddTo')?.addEventListener('change', function(this: HTMLSelectElement) {
+    content.querySelector('#selectPlaylistToAddTo')?.addEventListener('change', function (this: HTMLSelectElement) {
         if (this.value) {
             content.querySelector('.newPlaylistInfo')?.classList.add('hide');
             content.querySelector('#txtNewPlaylistName')?.removeAttribute('required');
@@ -277,7 +281,7 @@ function initEditor(content: DialogElement, options: PlaylistEditorOptions, item
     if (items.length) {
         content.querySelector('.fldSelectPlaylist')?.classList.remove('hide');
         populatePlaylists(options, content)
-            .catch(err => {
+            .catch((err) => {
                 console.error('[PlaylistEditor] failed to populate playlists', err);
             })
             .finally(loading.hide);
@@ -304,7 +308,7 @@ function centerFocus(elem: HTMLDivElement | null, horiz: boolean, on: boolean) {
             const fn = on ? 'on' : 'off';
             scrollHelper.centerFocus[fn](elem, horiz);
         })
-        .catch(err => {
+        .catch((err) => {
             console.error('[PlaylistEditor] failed to load scroll helper', err);
         });
 }

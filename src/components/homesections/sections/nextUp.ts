@@ -19,7 +19,9 @@ function getNextUpFetchFn(
     return function () {
         const apiClient = ServerConnections.getApiClient(serverId);
         const oldestDateForNextUp = new Date();
-        oldestDateForNextUp.setDate(oldestDateForNextUp.getDate() - userSettings.maxDaysForNextUp());
+        // Ensure maxDaysForNextUp returns a valid number
+        const maxDays = userSettings.maxDaysForNextUp() || 365;
+        oldestDateForNextUp.setDate(oldestDateForNextUp.getDate() - maxDays);
         return apiClient.getNextUpEpisodes({
             Limit: enableOverflow ? 24 : 15,
             Fields: 'PrimaryImageAspectRatio,DateCreated,Path,MediaSourceCount',
@@ -30,7 +32,7 @@ function getNextUpFetchFn(
             DisableFirstEpisode: false,
             NextUpDateCutoff: oldestDateForNextUp.toISOString(),
             EnableResumable: false,
-            EnableRewatching: userSettings.enableRewatchingInNextUp()
+            EnableRewatching: !!userSettings.enableRewatchingInNextUp()
         });
     };
 }
@@ -102,6 +104,6 @@ export function loadNextUp(
     const itemsContainer: SectionContainerElement | null = elem.querySelector('.itemsContainer');
     if (!itemsContainer) return;
     itemsContainer.fetchData = getNextUpFetchFn(apiClient.serverId(), userSettings, options);
-    itemsContainer.getItemsHtml = getNextUpItemsHtmlFn(userSettings.useEpisodeImagesInNextUpAndResume(), options);
+    itemsContainer.getItemsHtml = getNextUpItemsHtmlFn(!!userSettings.useEpisodeImagesInNextUpAndResume(), options);
     itemsContainer.parentContainer = elem;
 }

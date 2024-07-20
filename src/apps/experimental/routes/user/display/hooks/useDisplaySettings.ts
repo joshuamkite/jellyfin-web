@@ -91,10 +91,10 @@ async function loadDisplaySettings({
         episodeImagesInNextUp: Boolean(settings.useEpisodeImagesInNextUpAndResume()),
         language: settings.language() || 'auto',
         layout: layoutManager.getSavedLayout() || 'auto',
-        libraryPageSize: settings.libraryPageSize(),
-        maxDaysForNextUp: settings.maxDaysForNextUp(),
+        libraryPageSize: settings.libraryPageSize() ?? 0, // Ensure default value
+        maxDaysForNextUp: settings.maxDaysForNextUp() ?? 0, // Ensure default value
         screensaver: settings.screensaver() || 'none',
-        screensaverInterval: settings.backdropScreensaverInterval(),
+        screensaverInterval: settings.backdropScreensaverInterval() ?? 0, // Ensure default value
         theme: settings.theme()
     };
 
