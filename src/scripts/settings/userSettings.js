@@ -418,9 +418,21 @@ export class UserSettings {
     getUserDarkThemePreference() {
         return localStorage.getItem('userDarkTheme') || 'dark';
     }
+
+    // New methods to handle system theme preference
+    getSystemThemePreference() {
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    applyTheme() {
+        const savedTheme = this.theme();
+        const theme = savedTheme === 'auto' ? this.getSystemThemePreference() : savedTheme;
+        document.documentElement.setAttribute('data-theme', theme);
+    }
 }
 
-export const currentSettings = new UserSettings;
+export const currentSettings = new UserSettings();
+currentSettings.applyTheme();
 
 // Wrappers for non-ES6 modules and backward compatibility
 export const setUserInfo = currentSettings.setUserInfo.bind(currentSettings);
