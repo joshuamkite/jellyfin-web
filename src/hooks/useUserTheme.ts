@@ -6,11 +6,14 @@ import Events, { type Event } from 'utils/events';
 import { useApi } from './useApi';
 import { useThemes } from './useThemes';
 
-const THEME_FIELD_NAMES = [ 'appTheme', 'dashboardTheme' ];
+const THEME_FIELD_NAMES = [ 'appTheme', 'dashboardTheme', 'lightTheme', 'darkTheme', 'syncWithSystemTheme' ];
 
 export function useUserTheme() {
-    const [ theme, setTheme ] = useState<string>();
-    const [ dashboardTheme, setDashboardTheme ] = useState<string>();
+    const [theme, setTheme] = useState<string>();
+    const [dashboardTheme, setDashboardTheme] = useState<string>();
+    const [lightTheme, setLightTheme] = useState<string>('light'); // Default light theme
+    const [darkTheme, setDarkTheme] = useState<string>('dark'); // Default dark theme
+    const [syncWithSystemTheme, setSyncWithSystemTheme] = useState<boolean>(true); // Default sync with system theme
 
     const { user } = useApi();
     const { defaultTheme } = useThemes();
@@ -28,6 +31,12 @@ export function useUserTheme() {
         if (userTheme) setTheme(userTheme);
         const userDashboardTheme = userSettings.dashboardTheme();
         if (userDashboardTheme) setDashboardTheme(userDashboardTheme);
+        const userLightTheme = userSettings.lightTheme();
+        if (userLightTheme) setLightTheme(userLightTheme);
+        const userDarkTheme = userSettings.darkTheme();
+        if (userDarkTheme) setDarkTheme(userDarkTheme);
+        const userSyncWithSystemTheme = userSettings.syncWithSystemTheme();
+        setSyncWithSystemTheme(userSyncWithSystemTheme !== undefined ? userSyncWithSystemTheme : true);
     }, []);
 
     const onUserSettingsChange = useCallback((_e: Event, name?: string) => {
@@ -52,6 +61,9 @@ export function useUserTheme() {
 
     return {
         theme,
-        dashboardTheme
+        dashboardTheme,
+        lightTheme,
+        darkTheme,
+        syncWithSystemTheme
     };
 }

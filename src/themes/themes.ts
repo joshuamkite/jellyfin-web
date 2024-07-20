@@ -26,8 +26,11 @@ const ALL_THEMES = {
     wmc
 };
 
-/** The default theme if a user has not selected a preferred theme. */
-export const DEFAULT_THEME = dark;
+/** The default dark theme if a user has not selected a preferred dark theme. */
+export const DEFAULT_DARK_THEME = dark;
+
+/** The default light theme if a user has not selected a preferred light theme. */
+export const DEFAULT_LIGHT_THEME = light;
 
 /**
  * Gets a MUI Theme by its string id. Returns the default theme if no matching theme is found.
@@ -35,7 +38,7 @@ export const DEFAULT_THEME = dark;
 export function getTheme(id?: string): Theme {
     if (!id) {
         console.info('[getTheme] no theme id; returning default theme');
-        return DEFAULT_THEME;
+        return DEFAULT_DARK_THEME;
     }
 
     console.info('[getTheme] getting theme "%s"', id);
@@ -44,5 +47,5 @@ export function getTheme(id?: string): Theme {
     }
 
     console.warn('[getTheme] theme "%s" not found; returning default theme', id);
-    return DEFAULT_THEME;
+    return DEFAULT_DARK_THEME;
 }

@@ -3,6 +3,8 @@ import '../../../components/listview/listview.scss';
 import '../../../elements/emby-button/emby-button';
 import layoutManager from '../../../components/layoutManager';
 import Dashboard from '../../../utils/dashboard';
+import { saveUserThemeSyncPreference, saveUserLightThemePreference, saveUserDarkThemePreference, getUserThemeSyncPreference, getUserLightThemePreference, getUserDarkThemePreference } from '../../../userPreferences';
+import { getTheme } from '../../../themes/themes'; // Adjust the import path as necessary
 
 export default function (view, params) {
     view.querySelector('.btnLogout').addEventListener('click', function () {
@@ -54,6 +56,7 @@ export default function (view, params) {
             .catch(() => {
                 console.debug('Failed to get QuickConnect status');
             });
+
         ApiClient.getUser(userId).then(function (user) {
             page.querySelector('.headerUsername').innerText = user.Name;
             if (user.Policy.IsAdministrator && !layoutManager.tv) {
@@ -62,11 +65,32 @@ export default function (view, params) {
         });
 
         // Hide the actions if user preferences are being edited for a different user
-        if (params.userId && params.userId !== Dashboard.getCurrentUserId) {
+        if (params.userId && params.userId !== Dashboard.getCurrentUserId()) {
             page.querySelector('.userSection').classList.add('hide');
             page.querySelector('.adminSection').classList.add('hide');
             page.querySelector('.lnkControlsPreferences').classList.add('hide');
         }
+
+        // Initialize theme settings
+        const syncWithSystemCheckbox = view.querySelector('.syncWithSystem');
+        const lightThemeSelect = view.querySelector('.preferredLightTheme');
+        const darkThemeSelect = view.querySelector('.preferredDarkTheme');
+
+        syncWithSystemCheckbox.checked = getUserThemeSyncPreference();
+        lightThemeSelect.value = getUserLightThemePreference();
+        darkThemeSelect.value = getUserDarkThemePreference();
+
+        syncWithSystemCheckbox.addEventListener('change', function () {
+            saveUserThemeSyncPreference(syncWithSystemCheckbox.checked);
+        });
+
+        lightThemeSelect.addEventListener('change', function () {
+            saveUserLightThemePreference(lightThemeSelect.value);
+        });
+
+        darkThemeSelect.addEventListener('change', function () {
+            saveUserDarkThemePreference(darkThemeSelect.value);
+        });
 
         import('../../../components/autoFocuser').then(({ default: autoFocuser }) => {
             autoFocuser.autoFocus(view);

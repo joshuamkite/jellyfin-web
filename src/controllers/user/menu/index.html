@@ -121,6 +121,41 @@
                         </div>
                     </div>
                 </a>
+
+                <!-- Add theme settings here -->
+                <div class="verticalSection">
+                    <h3>${ThemeSettings}</h3>
+                    <label>
+                        <input type="checkbox" class="syncWithSystem" />
+                        ${SyncWithSystemTheme}
+                    </label>
+                    <div class="themeSelection">
+                        <label>${PreferredLightTheme}:
+                            <select class="preferredLightTheme">
+                                <option value="light">Light</option>
+                                <option value="appletv">Apple TV</option>
+                                <option value="blueradiance">Blue Radiance</option>
+                                <option value="purplehaze">Purple Haze</option>
+                                <option value="wmc">WMC</option>
+                                <!-- Add other light themes here -->
+                            </select>
+                        </label>
+                        <label>${PreferredDarkTheme}:
+                            <select class="preferredDarkTheme">
+                                <option value="dark">Dark</option>
+                                <option value="appletv">Apple TV</option>
+                                <option value="blueradiance">Blue Radiance</option>
+                                <option value="purplehaze">Purple Haze</option>
+                                <option value="wmc">WMC</option>
+                                <!-- Add other dark themes here -->
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="adminSection verticalSection verticalSection-extrabottompadding hide">
+                <!-- Existing admin section content -->
             </div>
         </div>
     </div>
