@@ -13,7 +13,7 @@ interface PaginationProps {
     libraryViewSettings: LibraryViewSettings;
     setLibraryViewSettings: React.Dispatch<React.SetStateAction<LibraryViewSettings>>;
     totalRecordCount: number;
-    isPlaceholderData: boolean
+    isPlaceholderData: boolean;
 }
 
 const Pagination: FC<PaginationProps> = ({
@@ -22,12 +22,10 @@ const Pagination: FC<PaginationProps> = ({
     totalRecordCount,
     isPlaceholderData
 }) => {
-    const limit = userSettings.libraryPageSize(undefined);
+    const limit = userSettings.libraryPageSize(undefined) ?? 0;
     const startIndex = libraryViewSettings.StartIndex ?? 0;
     const recordsStart = totalRecordCount ? startIndex + 1 : 0;
-    const recordsEnd = limit ?
-        Math.min(startIndex + limit, totalRecordCount) :
-        totalRecordCount;
+    const recordsEnd = limit > 0 ? Math.min(startIndex + limit, totalRecordCount) : totalRecordCount;
     const showControls = limit > 0 && limit < totalRecordCount;
 
     const onNextPageClick = useCallback(() => {
@@ -65,7 +63,7 @@ const Pagination: FC<PaginationProps> = ({
                         <IconButton
                             title={globalize.translate('Previous')}
                             className='paper-icon-button-light btnPreviousPage autoSize'
-                            disabled={startIndex == 0 || isPlaceholderData}
+                            disabled={startIndex === 0 || isPlaceholderData}
                             onClick={onPreviousPageClick}
                         >
                             <ArrowBackIcon />
@@ -74,7 +72,7 @@ const Pagination: FC<PaginationProps> = ({
                         <IconButton
                             title={globalize.translate('Next')}
                             className='paper-icon-button-light btnNextPage autoSize'
-                            disabled={startIndex + limit >= totalRecordCount || isPlaceholderData }
+                            disabled={startIndex + limit >= totalRecordCount || isPlaceholderData}
                             onClick={onNextPageClick}
                         >
                             <ArrowForwardIcon />

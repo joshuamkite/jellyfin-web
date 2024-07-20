@@ -3,7 +3,7 @@ import '../../../components/listview/listview.scss';
 import '../../../elements/emby-button/emby-button';
 import layoutManager from '../../../components/layoutManager';
 import Dashboard from '../../../utils/dashboard';
-import { saveUserThemeSyncPreference, saveUserLightThemePreference, saveUserDarkThemePreference, getUserThemeSyncPreference, getUserLightThemePreference, getUserDarkThemePreference } from '../../../userPreferences';
+import { saveUserThemeSyncPreference, saveUserLightThemePreference, saveUserDarkThemePreference, getUserThemeSyncPreference, getUserLightThemePreference, getUserDarkThemePreference } from '../../../scripts/settings/userSettings'; // Updated path
 import { getTheme } from '../../../themes/themes'; // Adjust the import path as necessary
 
 export default function (view, params) {

@@ -27,11 +27,6 @@ const defaultComicsPlayerSettings = {
 };
 
 export class UserSettings {
-    /**
-     * Bind UserSettings instance to user.
-     * @param {string} - User identifier.
-     * @param {Object} - ApiClient instance.
-     */
     setUserInfo(userId, apiClient) {
         if (this.saveTimeout) {
             clearTimeout(this.saveTimeout);
@@ -53,23 +48,14 @@ export class UserSettings {
         });
     }
 
-    // FIXME: Seems unused
     getData() {
         return this.displayPrefs;
     }
 
-    // FIXME: Seems unused
     importFrom(instance) {
         this.displayPrefs = instance.getData();
     }
 
-    // FIXME: 'appSettings.set' doesn't return any value
-    /**
-     * Set value of setting.
-     * @param {string} name - Name of setting.
-     * @param {mixed} value - Value of setting.
-     * @param {boolean} [enableOnServer] - Flag to save preferences on server.
-     */
     set(name, value, enableOnServer) {
         const userId = this.currentUserId;
         const currentValue = this.get(name, enableOnServer);
@@ -87,12 +73,6 @@ export class UserSettings {
         return result;
     }
 
-    /**
-     * Get value of setting.
-     * @param {string} name - Name of setting.
-     * @param {boolean} [enableOnServer] - Flag to return preferences from server (cached).
-     * @return {string} Value of setting.
-     */
     get(name, enableOnServer) {
         const userId = this.currentUserId;
         if (enableOnServer !== false && this.displayPrefs) {
@@ -102,11 +82,6 @@ export class UserSettings {
         return appSettings.get(name, userId);
     }
 
-    /**
-     * Get or set user config.
-     * @param {Object|undefined} config - Configuration or undefined.
-     * @return {Object|Promise} Configuration or Promise.
-     */
     serverConfig(config) {
         const apiClient = this.currentApiClient;
         if (config) {
@@ -118,11 +93,6 @@ export class UserSettings {
         });
     }
 
-    /**
-     * Get or set 'Allowed Audio Channels'.
-     * @param {string|undefined} val - 'Allowed Audio Channels'.
-     * @return {string} 'Allowed Audio Channels'.
-     */
     allowedAudioChannels(val) {
         if (val !== undefined) {
             return this.set('allowedAudioChannels', val, false);
@@ -131,25 +101,14 @@ export class UserSettings {
         return this.get('allowedAudioChannels', false) || '-1';
     }
 
-    /**
-     * Get or set 'Perfer fMP4-HLS Container' state.
-     * @param {boolean|undefined} val - Flag to enable 'Perfer fMP4-HLS Container' or undefined.
-     * @return {boolean} 'Prefer fMP4-HLS Container' state.
-     */
     preferFmp4HlsContainer(val) {
         if (val !== undefined) {
             return this.set('preferFmp4HlsContainer', val.toString(), false);
         }
 
-        // Enable it by default only for the platforms that play fMP4 for sure.
         return toBoolean(this.get('preferFmp4HlsContainer', false), browser.safari || browser.firefox || browser.chrome || browser.edgeChromium);
     }
 
-    /**
-     * Get or set 'Cinema Mode' state.
-     * @param {boolean|undefined} val - Flag to enable 'Cinema Mode' or undefined.
-     * @return {boolean} 'Cinema Mode' state.
-     */
     enableCinemaMode(val) {
         if (val !== undefined) {
             return this.set('enableCinemaMode', val.toString(), false);
@@ -158,11 +117,6 @@ export class UserSettings {
         return toBoolean(this.get('enableCinemaMode', false), true);
     }
 
-    /**
-     * Get or set 'Enable Audio Normalization' state.
-     * @param {string|undefined} val - Flag to enable 'Enable Audio Normalization' or undefined.
-     * @return {string} 'Enable Audio Normalization' state.
-     */
     selectAudioNormalization(val) {
         if (val !== undefined) {
             return this.set('selectAudioNormalization', val, false);
@@ -171,11 +125,6 @@ export class UserSettings {
         return this.get('selectAudioNormalization', false) || 'TrackGain';
     }
 
-    /**
-     * Get or set 'Next Video Info Overlay' state.
-     * @param {boolean|undefined} val - Flag to enable 'Next Video Info Overlay' or undefined.
-     * @return {boolean} 'Next Video Info Overlay' state.
-     */
     enableNextVideoInfoOverlay(val) {
         if (val !== undefined) {
             return this.set('enableNextVideoInfoOverlay', val.toString());
@@ -184,11 +133,6 @@ export class UserSettings {
         return toBoolean(this.get('enableNextVideoInfoOverlay', false), true);
     }
 
-    /**
-     * Get or set 'Video Remaining/Total Time' state.
-     * @param {boolean|undefined} val - Flag to enable 'Video Remaining/Total Time' or undefined.
-     * @return {boolean} 'Video Remaining/Total Time' state.
-     */
     enableVideoRemainingTime(val) {
         if (val !== undefined) {
             return this.set('enableVideoRemainingTime', val.toString());
@@ -197,11 +141,6 @@ export class UserSettings {
         return toBoolean(this.get('enableVideoRemainingTime', false), true);
     }
 
-    /**
-     * Get or set 'Theme Songs' state.
-     * @param {boolean|undefined} [val] - Flag to enable 'Theme Songs' or undefined.
-     * @return {boolean} 'Theme Songs' state.
-     */
     enableThemeSongs(val) {
         if (val !== undefined) {
             return this.set('enableThemeSongs', val.toString(), false);
@@ -210,11 +149,6 @@ export class UserSettings {
         return toBoolean(this.get('enableThemeSongs', false), false);
     }
 
-    /**
-     * Get or set 'Theme Videos' state.
-     * @param {boolean|undefined} [val] - Flag to enable 'Theme Videos' or undefined.
-     * @return {boolean} 'Theme Videos' state.
-     */
     enableThemeVideos(val) {
         if (val !== undefined) {
             return this.set('enableThemeVideos', val.toString(), false);
@@ -223,11 +157,6 @@ export class UserSettings {
         return toBoolean(this.get('enableThemeVideos', false), false);
     }
 
-    /**
-     * Get or set 'Fast Fade-in' state.
-     * @param {boolean|undefined} [val] - Flag to enable 'Fast Fade-in' or undefined.
-     * @return {boolean} 'Fast Fade-in' state.
-     */
     enableFastFadein(val) {
         if (val !== undefined) {
             return this.set('fastFadein', val.toString(), false);
@@ -236,11 +165,6 @@ export class UserSettings {
         return toBoolean(this.get('fastFadein', false), true);
     }
 
-    /**
-     * Get or set 'Blurhash' state.
-     * @param {boolean|undefined} [val] - Flag to enable 'Blurhash' or undefined.
-     * @return {boolean} 'Blurhash' state.
-     */
     enableBlurhash(val) {
         if (val !== undefined) {
             return this.set('blurhash', val.toString(), false);
@@ -249,11 +173,6 @@ export class UserSettings {
         return toBoolean(this.get('blurhash', false), true);
     }
 
-    /**
-     * Get or set 'Backdrops' state.
-     * @param {boolean|undefined} [val] - Flag to enable 'Backdrops' or undefined.
-     * @return {boolean} 'Backdrops' state.
-     */
     enableBackdrops(val) {
         if (val !== undefined) {
             return this.set('enableBackdrops', val.toString(), false);
@@ -262,11 +181,6 @@ export class UserSettings {
         return toBoolean(this.get('enableBackdrops', false), false);
     }
 
-    /**
-     * Get or set 'disableCustomCss' state.
-     * @param {boolean|undefined} [val] - Flag to enable 'disableCustomCss' or undefined.
-     * @return {boolean} 'disableCustomCss' state.
-     */
     disableCustomCss(val) {
         if (val !== undefined) {
             return this.set('disableCustomCss', val.toString(), false);
@@ -275,11 +189,6 @@ export class UserSettings {
         return toBoolean(this.get('disableCustomCss', false), false);
     }
 
-    /**
-     * Get or set customCss.
-     * @param {string|undefined} [val] - Language.
-     * @return {string} Language.
-     */
     customCss(val) {
         if (val !== undefined) {
             return this.set('customCss', val.toString(), false);
@@ -288,11 +197,6 @@ export class UserSettings {
         return this.get('customCss', false);
     }
 
-    /**
-     * Get or set 'Details Banner' state.
-     * @param {boolean|undefined} [val] - Flag to enable 'Details Banner' or undefined.
-     * @return {boolean} 'Details Banner' state.
-     */
     detailsBanner(val) {
         if (val !== undefined) {
             return this.set('detailsBanner', val.toString(), false);
@@ -301,11 +205,6 @@ export class UserSettings {
         return toBoolean(this.get('detailsBanner', false), true);
     }
 
-    /**
-     * Get or set 'Use Episode Images in Next Up and Continue Watching' state.
-     * @param {string|boolean|undefined} [val] - Flag to enable 'Use Episode Images in Next Up and Continue Watching' or undefined.
-     * @return {boolean} 'Use Episode Images in Next Up' state.
-     */
     useEpisodeImagesInNextUpAndResume(val) {
         if (val !== undefined) {
             return this.set('useEpisodeImagesInNextUpAndResume', val.toString(), true);
@@ -314,11 +213,6 @@ export class UserSettings {
         return toBoolean(this.get('useEpisodeImagesInNextUpAndResume', true), false);
     }
 
-    /**
-     * Get or set language.
-     * @param {string|undefined} [val] - Language.
-     * @return {string} Language.
-     */
     language(val) {
         if (val !== undefined) {
             return this.set('language', val.toString(), false);
@@ -327,11 +221,6 @@ export class UserSettings {
         return this.get('language', false);
     }
 
-    /**
-     * Get or set datetime locale.
-     * @param {string|undefined} [val] - Datetime locale.
-     * @return {string} Datetime locale.
-     */
     dateTimeLocale(val) {
         if (val !== undefined) {
             return this.set('datetimelocale', val.toString(), false);
@@ -340,11 +229,6 @@ export class UserSettings {
         return this.get('datetimelocale', false);
     }
 
-    /**
-     * Get or set amount of rewind.
-     * @param {number|undefined} val - Amount of rewind.
-     * @return {number} Amount of rewind.
-     */
     skipBackLength(val) {
         if (val !== undefined) {
             return this.set('skipBackLength', val.toString());
@@ -353,11 +237,6 @@ export class UserSettings {
         return parseInt(this.get('skipBackLength') || '10000', 10);
     }
 
-    /**
-     * Get or set amount of fast forward.
-     * @param {number|undefined} val - Amount of fast forward.
-     * @return {number} Amount of fast forward.
-     */
     skipForwardLength(val) {
         if (val !== undefined) {
             return this.set('skipForwardLength', val.toString());
@@ -366,11 +245,6 @@ export class UserSettings {
         return parseInt(this.get('skipForwardLength') || '30000', 10);
     }
 
-    /**
-     * Get or set theme for Dashboard.
-     * @param {string|undefined} [val] - Theme for Dashboard.
-     * @return {string} Theme for Dashboard.
-     */
     dashboardTheme(val) {
         if (val !== undefined) {
             return this.set('dashboardTheme', val);
@@ -379,11 +253,6 @@ export class UserSettings {
         return this.get('dashboardTheme');
     }
 
-    /**
-     * Get or set skin.
-     * @param {string|undefined} val - Skin.
-     * @return {string} Skin.
-     */
     skin(val) {
         if (val !== undefined) {
             return this.set('skin', val, false);
@@ -392,11 +261,6 @@ export class UserSettings {
         return this.get('skin', false);
     }
 
-    /**
-     * Get or set main theme.
-     * @param {string|undefined} [val] - Main theme.
-     * @return {string} Main theme.
-     */
     theme(val) {
         if (val !== undefined) {
             return this.set('appTheme', val, false);
@@ -405,11 +269,6 @@ export class UserSettings {
         return this.get('appTheme', false);
     }
 
-    /**
-     * Get or set screensaver.
-     * @param {string|undefined} [val] - Screensaver.
-     * @return {string} Screensaver.
-     */
     screensaver(val) {
         if (val !== undefined) {
             return this.set('screensaver', val, false);
@@ -418,11 +277,6 @@ export class UserSettings {
         return this.get('screensaver', false);
     }
 
-    /**
-     * Get or set the interval between backdrops when using the backdrop screensaver.
-     * @param {number|undefined} [val] - The interval between backdrops in seconds.
-     * @return {number} The interval between backdrops in seconds.
-     */
     backdropScreensaverInterval(val) {
         if (val !== undefined) {
             return this.set('backdropScreensaverInterval', val.toString(), false);
@@ -431,11 +285,6 @@ export class UserSettings {
         return parseInt(this.get('backdropScreensaverInterval', false), 10) || 5;
     }
 
-    /**
-     * Get or set library page size.
-     * @param {number|undefined} [val] - Library page size.
-     * @return {number} Library page size.
-     */
     libraryPageSize(val) {
         if (val !== undefined) {
             return this.set('libraryPageSize', val.toString(), false);
@@ -443,18 +292,12 @@ export class UserSettings {
 
         const libraryPageSize = parseInt(this.get('libraryPageSize', false), 10);
         if (libraryPageSize === 0) {
-            // Explicitly return 0 to avoid returning 100 because 0 is falsy.
             return 0;
         } else {
             return libraryPageSize || 100;
         }
     }
 
-    /**
-     * Get or set max days for next up list.
-     * @param {number|undefined} [val] - Max days for next up.
-     * @return {number} Max days for a show to stay in next up without being watched.
-     */
     maxDaysForNextUp(val) {
         if (val !== undefined) {
             return this.set('maxDaysForNextUp', val.toString(), false);
@@ -462,18 +305,12 @@ export class UserSettings {
 
         const maxDaysForNextUp = parseInt(this.get('maxDaysForNextUp', false), 10);
         if (maxDaysForNextUp === 0) {
-            // Explicitly return 0 to avoid returning 100 because 0 is falsy.
             return 0;
         } else {
             return maxDaysForNextUp || 365;
         }
     }
 
-    /**
-     * Get or set rewatching in next up.
-     * @param {boolean|undefined} [val] - If rewatching items should be included in next up.
-     * @returns {boolean} Rewatching in next up state.
-     */
     enableRewatchingInNextUp(val) {
         if (val !== undefined) {
             return this.set('enableRewatchingInNextUp', val.toString(), false);
@@ -482,11 +319,6 @@ export class UserSettings {
         return toBoolean(this.get('enableRewatchingInNextUp', false), false);
     }
 
-    /**
-     * Get or set sound effects.
-     * @param {string|undefined} val - Sound effects.
-     * @return {string} Sound effects.
-     */
     soundEffects(val) {
         if (val !== undefined) {
             return this.set('soundeffects', val, false);
@@ -495,18 +327,6 @@ export class UserSettings {
         return this.get('soundeffects', false);
     }
 
-    /**
-    * @typedef {Object} Query
-    * @property {number} StartIndex - query StartIndex.
-    * @property {number} Limit - query Limit.
-    */
-
-    /**
-     * Load query settings.
-     * @param {string} key - Query key.
-     * @param {Object} query - Query base.
-     * @return {Query} Query.
-     */
     loadQuerySettings(key, query) {
         let values = this.get(key);
         if (values) {
@@ -517,11 +337,6 @@ export class UserSettings {
         return query;
     }
 
-    /**
-     * Save query settings.
-     * @param {string} key - Query key.
-     * @param {Object} query - Query.
-     */
     saveQuerySettings(key, query) {
         const values = {};
         if (query.SortBy) {
@@ -535,96 +350,73 @@ export class UserSettings {
         return this.set(key, JSON.stringify(values));
     }
 
-    /**
-     * Get view layout setting.
-     * @param {string} key - View Setting key.
-     * @return {string} View Setting value.
-     */
     getSavedView(key) {
         return this.get(key + '-_view');
     }
 
-    /**
-     * Set view layout setting.
-     * @param {string} key - View Setting key.
-     * @param {string} value - View Setting value.
-     */
     saveViewSetting(key, value) {
         return this.set(key + '-_view', value);
     }
 
-    /**
-     * Get subtitle appearance settings.
-     * @param {string|undefined} key - Settings key.
-     * @return {Object} Subtitle appearance settings.
-     */
     getSubtitleAppearanceSettings(key) {
         key = key || 'localplayersubtitleappearance3';
         return Object.assign(defaultSubtitleAppearanceSettings, JSON.parse(this.get(key, false) || '{}'));
     }
 
-    /**
-     * Set subtitle appearance settings.
-     * @param {Object} value - Subtitle appearance settings.
-     * @param {string|undefined} key - Settings key.
-     */
     setSubtitleAppearanceSettings(value, key) {
         key = key || 'localplayersubtitleappearance3';
         return this.set(key, JSON.stringify(value), false);
     }
 
-    /**
-     * Get comics player settings.
-     * @param {string} mediaSourceId - Media Source Id.
-     * @return {Object} Comics player settings.
-     */
     getComicsPlayerSettings(mediaSourceId) {
         const settings = JSON.parse(this.get('comicsPlayerSettings', false) || '{}');
         return Object.assign(defaultComicsPlayerSettings, settings[mediaSourceId]);
     }
 
-    /**
-     * Set comics player settings.
-     * @param {Object} value - Comics player settings.
-     * @param {string} mediaSourceId - Media Source Id.
-     */
     setComicsPlayerSettings(value, mediaSourceId) {
         const settings = JSON.parse(this.get('comicsPlayerSettings', false) || '{}');
         settings[mediaSourceId] = value;
         return this.set('comicsPlayerSettings', JSON.stringify(settings), false);
     }
 
-    /**
-     * Set filter.
-     * @param {string} key - Filter key.
-     * @param {string} value - Filter value.
-     */
     setFilter(key, value) {
         return this.set(key, value, true);
     }
 
-    /**
-     * Get filter.
-     * @param {string} key - Filter key.
-     * @return {string} Filter value.
-     */
     getFilter(key) {
         return this.get(key, true);
     }
 
-    /**
-     * Gets the current sort values (Legacy - Non-JSON)
-     * (old views such as list.js [Photos] will
-     * use this one)
-     * @param {string} key - Filter key.
-     * @param {string} defaultSortBy - Default SortBy value.
-     * @return {Object} sortOptions object
-     */
     getSortValuesLegacy(key, defaultSortBy) {
         return {
             sortBy: this.getFilter(key + '-sortby') || defaultSortBy,
             sortOrder: this.getFilter(key + '-sortorder') === 'Descending' ? 'Descending' : 'Ascending'
         };
+    }
+
+    // Theme-related methods
+    saveUserThemeSyncPreference(sync) {
+        localStorage.setItem('userThemeSync', sync);
+    }
+
+    saveUserLightThemePreference(theme) {
+        localStorage.setItem('userLightTheme', theme);
+    }
+
+    saveUserDarkThemePreference(theme) {
+        localStorage.setItem('userDarkTheme', theme);
+    }
+
+    getUserThemeSyncPreference() {
+        return JSON.parse(localStorage.getItem('userThemeSync')) || false;
+    }
+
+    getUserLightThemePreference() {
+        return localStorage.getItem('userLightTheme') || 'light';
+    }
+
+    getUserDarkThemePreference() {
+        return localStorage.getItem('userDarkTheme') || 'dark';
     }
 }
 
@@ -676,3 +468,11 @@ export const disableCustomCss = currentSettings.disableCustomCss.bind(currentSet
 export const getSavedView = currentSettings.getSavedView.bind(currentSettings);
 export const saveViewSetting = currentSettings.saveViewSetting.bind(currentSettings);
 export const getSortValuesLegacy = currentSettings.getSortValuesLegacy.bind(currentSettings);
+
+// Exporting theme-related functions for external use
+export const saveUserThemeSyncPreference = currentSettings.saveUserThemeSyncPreference.bind(currentSettings);
+export const saveUserLightThemePreference = currentSettings.saveUserLightThemePreference.bind(currentSettings);
+export const saveUserDarkThemePreference = currentSettings.saveUserDarkThemePreference.bind(currentSettings);
+export const getUserThemeSyncPreference = currentSettings.getUserThemeSyncPreference.bind(currentSettings);
+export const getUserLightThemePreference = currentSettings.getUserLightThemePreference.bind(currentSettings);
+export const getUserDarkThemePreference = currentSettings.getUserDarkThemePreference.bind(currentSettings);

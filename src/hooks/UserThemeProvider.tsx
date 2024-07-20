@@ -1,40 +1,23 @@
-import { ThemeProvider } from '@mui/material';
-import React, { FC, PropsWithChildren, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useUserTheme } from '../hooks/useUserTheme'; // Adjust the import path as necessary
-
-import { getTheme } from './themes'; // Adjust the import path as necessary
+import React, { useState, FC, PropsWithChildren, useEffect } from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { getUserDarkThemePreference, getUserLightThemePreference } from 'scripts/settings/userSettings';
+import { useUserTheme } from '../hooks/useUserTheme';
 
 const UserThemeProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
-    const [muiTheme, setMuiTheme] = useState(getTheme('dark')); // Default theme
-    const location = useLocation();
-    const { theme, dashboardTheme, lightTheme, darkTheme, syncWithSystemTheme } = useUserTheme();
+    const { lightTheme, darkTheme } = useUserTheme();
+    const [muiTheme, setMuiTheme] = useState(createTheme({ palette: { mode: 'dark' } }));
 
     useEffect(() => {
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-        const applyTheme = () => {
-            if (syncWithSystemTheme) {
-                setMuiTheme(prefersDarkScheme.matches ? getTheme(darkTheme) : getTheme(lightTheme));
-            } else {
-                setMuiTheme(getTheme(theme));
+        const theme = createTheme({
+            palette: {
+                mode: darkTheme === 'dark' ? 'dark' : 'light',
+                primary: {
+                    main: darkTheme === 'dark' ? '#000' : '#fff'
+                }
             }
-        };
-
-        applyTheme();
-
-        prefersDarkScheme.addEventListener('change', applyTheme);
-
-        return () => {
-            prefersDarkScheme.removeEventListener('change', applyTheme);
-        };
-    }, [theme, lightTheme, darkTheme, syncWithSystemTheme]);
-
-    useEffect(() => {
-        if (location.pathname.startsWith('/dashboard')) {
-            setMuiTheme(getTheme(dashboardTheme));
-        }
-    }, [dashboardTheme, location.pathname]);
+        });
+        setMuiTheme(theme);
+    }, [darkTheme]);
 
     return (
         <ThemeProvider theme={muiTheme}>
