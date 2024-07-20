@@ -150,3 +150,19 @@ form {
     margin-top: auto;
     margin-bottom: auto;
 }
+
+/* Theme-related styles */
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+}
+
+[data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}

@@ -44,6 +44,8 @@ import './styles/livetv.scss';
 import './styles/dashboard.scss';
 import './styles/detailtable.scss';
 
+import { applySystemTheme, getSystemTheme, applyTheme } from './utils/theme';
+
 function loadCoreDictionary() {
     const languages = ['af', 'ar', 'be-by', 'bg-bg', 'bn_bd', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'en-gb', 'en-us', 'eo', 'es', 'es_419', 'es-ar', 'es_do', 'es-mx', 'et', 'eu', 'fa', 'fi', 'fil', 'fr', 'fr-ca', 'gl', 'gsw', 'he', 'hi-in', 'hr', 'hu', 'id', 'it', 'ja', 'kk', 'ko', 'lt-lt', 'lv', 'mr', 'ms', 'nb', 'nl', 'nn', 'pl', 'pr', 'pt', 'pt-br', 'pt-pt', 'ro', 'ru', 'sk', 'sl-si', 'sq', 'sv', 'ta', 'th', 'tr', 'uk', 'ur_pk', 'vi', 'zh-cn', 'zh-hk', 'zh-tw'];
     const translations = languages.map(function (language) {
@@ -88,6 +90,15 @@ build: ${__JF_BUILD_VERSION__}`);
         Events.on(ServerConnections, 'localusersignedin', globalize.updateCurrentCulture);
         Events.on(ServerConnections, 'localusersignedout', globalize.updateCurrentCulture);
     });
+
+    // Theme initialization
+    const matchSystemTheme = JSON.parse(localStorage.getItem('matchSystemTheme') || 'false');
+    if (matchSystemTheme) {
+        applySystemTheme();
+    } else {
+        const userTheme = localStorage.getItem('theme') || getSystemTheme();
+        applyTheme(userTheme);
+    }
 }
 
 function onGlobalizeInit() {
